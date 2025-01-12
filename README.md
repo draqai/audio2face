@@ -9,7 +9,8 @@ character facial performance by automatically detecting emotions in the input au
 directly specified as part of the input to the microservice. A rendering engine can consume Blendshape topology to
 display a 3D avatar's performance.
 
-![](A2FGit_Banner_03.png)
+![A2FGit_Banner_03](https://github.com/user-attachments/assets/18823c51-7b5c-4350-876f-e384195159a4)
+
 
 This Git repository stores resources presented in
 [Audio2Face-3D Microservice documentation](https://docs.nvidia.com/ace/latest/modules/a2f-docs/text/getting_started/overview.html).
