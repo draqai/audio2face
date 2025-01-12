@@ -1,0 +1,10 @@
+**/.venv/
+**/__pycache__/
+proto/build
+proto/dist
+proto/nvidia_ace
+**/output*/
+**/performance_output*/
+*.trt
+*.egg-info
+

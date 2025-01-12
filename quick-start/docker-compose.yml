@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+services:
+  a2f-3d-init:
+    image: nvcr.io/nim/nvidia/audio2face-3d:1.2
+    container_name: a2f-3d-init
+    secrets:
+      - ngc_api_key
+    working_dir: /opt/nvidia/a2f_pipeline
+    entrypoint: >
+      sh -c "./service/generate_trt_models.py --stylization-config /mnt/configs/${A2F_3D_MODEL_NAME}_stylization_config.yaml --advanced-config /mnt/configs/advanced_config.yaml"
+    volumes:
+      - a2f-3d-init-data:/tmp/a2x/
+      - ./configs/:/mnt/configs/
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+
+  a2f-3d-service:
+    image: nvcr.io/nim/nvidia/audio2face-3d:1.2
+    secrets:
+      - ngc_api_key
+    depends_on:
+      a2f-3d-init:
+        condition: service_completed_successfully
+    entrypoint: a2f_pipeline.run --stylization-config /mnt/configs/${A2F_3D_MODEL_NAME}_stylization_config.yaml --deployment-config /mnt/configs/deployment_config.yaml --advanced-config /mnt/configs/advanced_config.yaml
+    environment:
+      LD_LIBRARY_PATH: /usr/local/lib/:/root/.local/lib/
+      USE_NEW_NVSTREAMMUX: yes
+      NIM_DISABLE_MODEL_DOWNLOAD: true
+      NIM_SKIP_A2F_START: true
+    volumes:
+      - a2f-3d-init-data:/tmp/a2x/
+      - ./configs/:/mnt/configs/
+    network_mode: "host"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+  
+volumes:
+  a2f-3d-init-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./a2f-3d-init-data
+  static: {}
+
+secrets:
+ ngc_api_key:
+   environment: NGC_API_KEY

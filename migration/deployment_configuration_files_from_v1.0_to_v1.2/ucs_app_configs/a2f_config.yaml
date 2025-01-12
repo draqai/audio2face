@@ -1,0 +1,86 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+streamNumber: "10"
+#> type: string
+#> description: max number of stream for the a2f pipeline
+a2eEnabled: "True"
+#> type: string
+#> description:  whether A2E is enabled
+a2eInferenceInterval: "10"
+#> type: string
+#> description: perform 1 inference per group of N frames
+faceParams: "{}"
+#> type: string
+#> description: audio2face animation settings
+a2fModelName: "claire_v1.3"
+#> type: string
+#> description: model name used for A2F
+a2fDeviceId: "0"
+#> type: string
+#> description: Device ID for the targeted GPU for A2F to use, default is 0
+a2eEmotionContrast: "1.0"
+#> type: string
+#> description: Emotion contrast applied as sigmoid function to inferred A2E vector
+a2eLiveBlendCoef: "0.7"
+#> type: string
+#> description: Used in smoothing the emotion vector output to reduce noise or sudden fluctuations
+a2eEnablePreferredEmotion: "True"
+#> type: string
+#> description: Set to True if User provided preferred Emotion vector should be enabled
+a2ePreferredEmotionStrength: "0.5"
+#> type: string
+#> description: Used for blending preferred_emotion vector with the A2F emotion vector,
+#> influenced by the preferred_emotion_strength value
+a2eEmotionStrength: "0.6"
+#> type: string
+#> description: scales the output to fall within the range of 0 to 1
+a2eMaxEmotions: "3"
+#> type: string
+#> description: Defines how many emotions should be retained, while any additional ones are set to zero.
+#> This parameter has a valid range from 0 to 6
+addSilencePaddingAfterAudio: "False"
+#> type: string
+#> description: add 0.5 seconds of silent audio chunks
+queueAfterStreammux: "1"
+#> type: string
+#> description: queue size after the muxer element
+queueAfterA2F: "300"
+#> type: string
+#> description: queue size after the a2f plugin
+queueAfterA2E: "1"
+#> type: string
+#> description: queue size after the a2e plugin
+maxLenUUID: "50"
+#> type: string 
+#> description: maximum sample rate accepted by a2f
+maxSampleRate: "144000"
+#> type: string 
+#> description: minimum sample rate accepted by a2f
+minSampleRate: "16000"
+#> type: string
+#> description: max length of UUID used in a2f
+lowFps: "29"
+#> type: string
+#> description: low fps threshold
+lowFpsMaxDurationSecond: "7"
+#> type: string
+#> description: max allowed duration with low fps
+useFP16A2F: "True"
+#> type: string
+#> description: use FP16 for A2F trt model generation
+useFP16A2E: "True"
+#> type: string
+#> description: use FP16 for A2E trt model generation
